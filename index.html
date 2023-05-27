@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="indexStyle.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="#" class="logo">
+        <img src="images/WolfFace-min.png" alt="Wolf Logo placeholder" />
+      </a>
+      <div class="navigation">
+        <nav>
+          <a href="#">Settings</a>
+          <a href="#">Language 🌎</a>
+          <a href="#">Sign in 👤</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="searchblock">
+      <div class="searchbar">
+        <div class="searchSelector">
+          <label for="quanitiyfilter">Quanitiy</label>
+          <label for="datefilter">Arrive By</label>
+          <input
+            id="quanitiyfilter"
+            type="number"
+            placeholder="Any"
+            maxlength="4"
+          />
+          <input id="datefilter" type="date" />
+          <!-- <div class="partnumber">PN</div>
+          <div class="ymm">YMM</div> -->
+        </div>
+        <input
+          id="partsearch"
+          type="text"
+          placeholder="Part Number"
+          required=""
+        />
+        <button class="search">🔎</button>
+      </div>
+    </div>
+
+    <div class="bodyGrid">
+      <Filters class="filters">
+        <div class="filters__columns">
+          <button class="filters__button">Filter!</button>
+        </div>
+        <div class="supplier__filters"></div>
+      </Filters>
+      <div class="product__columns">
+        <div class="cbf">
+          <div id="cheepest">Cheepest</div>
+          <div id="best">Best</div>
+          <div id="fastest">Fastest</div>
+        </div>
+        <div class="product__row">
+          <button class="example"></button>
+        </div>
+      </div>
+
+      <div class="savings">Savings</div>
+    </div>
+    <script src="indexScript.js"></script>
+  </body>
+</html>
+
+<!-- MOVEMENTS
+<div class="movements">
+  <div class="movements__row">
+    <div class="movements__type movements__type--deposit">2 deposit</div>
+    <div class="movements__date">3 days ago</div>
+    <div class="movements__value">4 000€</div>
+  </div>
+  <div class="movements__row">
+    <div class="movements__type movements__type--withdrawal">1 withdrawal</div>
+    <div class="movements__date">24/01/2037</div>
+    <div class="movements__value">-378€</div>
+  </div>
+</div> -->

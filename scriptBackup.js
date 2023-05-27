@@ -1,0 +1,382 @@
+// Version 3 will have an order builder function
+// how many parts do you need
+// how quickly do you need
+// - builds a combination of different suppliers to minimize cost while fulfilling parameters
+// - loading bar
+// - blue check system
+
+// Placeholder data
+
+const item1 = {
+  supplier: "Bilstein",
+  businessType: 1, // 1 = manufactuer 2 = distributer
+  price: 100,
+  inStock: 116,
+  shipLocation: "Henderson, NV",
+  shippingTime: 3,
+};
+
+const item2 = {
+  supplier: "Turn14",
+  businessType: 2, // 1 = manufactuer 2 = distributer
+  price: 110,
+  inStock: "backordered",
+  shipLocation: "Austin, Tx",
+  shippingTime: 3,
+};
+
+const item3 = {
+  supplier: "Turn14",
+  businessType: 2, // 1 = manufactuer 2 = distributer
+  price: 115,
+  inStock: 2,
+  shipLocation: "Pittsburg, PA",
+  shippingTime: 5,
+};
+
+const item4 = {
+  supplier: "Meyer",
+  businessType: 2, // 1 = manufactuer 2 = distributer
+  price: 120,
+  inStock: 25,
+  shipLocation: "Henderson, NV",
+  shippingTime: 2,
+};
+
+const item5 = {
+  supplier: "Meyer",
+  businessType: 2, // 1 = manufactuer 2 = distributer
+  price: 95,
+  inStock: 10,
+  shipLocation: "MDI, ME",
+  shippingTime: 14,
+};
+
+const item6 = {
+  supplier: "Meyer",
+  businessType: 2, // 1 = manufactuer 2 = distributer
+  price: 95,
+  inStock: "backordered",
+  shipLocation: "MDI, ME",
+  shippingTime: 28,
+};
+
+const availableProducts = [item1, item2, item3, item4, item5, item6];
+
+// Code for parsing data
+const filterCatagories = document.querySelector(".supplier__filters");
+const partsEntries = document.querySelector(".product__row");
+const searchButton = document.querySelector(".search");
+const filtersButton = document.querySelector(".filters__button");
+
+// Run the data through some filters, then display with HTML
+
+const displayFilters = function (returnedProducts, sort = false) {
+  //   productSupplyers.innerHTML = "";
+  const manufacturerSet = new Set();
+  const distributorSet = new Set();
+  var inStockArray = [];
+  var inStockArraySTR = [];
+  const shippingArray = [];
+  const shippingArraySTR = [];
+
+  // filter numerical arrays by catagory (magnetude)
+  const filterArray = function (
+    item,
+    mag1,
+    mag2,
+    mag3,
+    mag4,
+    arrayStr,
+    arrayNum
+  ) {
+    if (typeof item === "string") {
+      arrayStr.unshift(item);
+    } else if (item >= mag4) {
+      arrayNum.unshift(mag4);
+    } else if (item >= mag3) {
+      arrayNum.unshift(mag3);
+    } else if (item >= mag2) {
+      arrayNum.unshift(mag2);
+    } else if (item >= mag1) {
+      arrayNum.unshift(mag1);
+    } else {
+      arrayNum.unshift(1);
+    }
+  };
+
+  // sort out manufacturers and distributers
+  returnedProducts.forEach(function (item) {
+    if (item.businessType == 1) {
+      manufacturerSet.add(item.supplier);
+    }
+    if (item.businessType == 2) {
+      distributorSet.add(item.supplier);
+    }
+
+    filterArray(item.inStock, 4, 10, 25, 100, inStockArraySTR, inStockArray);
+    filterArray(
+      item.shippingTime,
+      2,
+      3,
+      7,
+      14,
+      shippingArraySTR,
+      shippingArray
+    );
+  });
+
+  // sort the numerical catagories least to greatest, convert to string add +
+  const orderArrays = function (arrayNum, arrayStr) {
+    arrayNum.sort(function (a, b) {
+      return a - b;
+    });
+    var arraySTR = arrayStr.concat(arrayNum);
+    var arraySTR = arraySTR.toString();
+    var arrayBae = arraySTR.split(",");
+    // var arrayBae = arrayBae.map(function (obj) {
+    //   return (obj += "+");
+    // });
+
+    return arrayBae;
+  };
+
+  // add numerical array to str array, convert to set to remove duplicates
+  var inStockSet = new Set(orderArrays(inStockArray, inStockArraySTR));
+  var shippingSet = new Set(orderArrays(shippingArray, shippingArraySTR));
+
+  // this is what to modify if you want to show more filters
+  const filters = [
+    { filter: "manufacturers", set: manufacturerSet, titleCheck: 1 },
+    { filter: "distributors", set: distributorSet, titleCheck: 1 },
+    { filter: "In-Stock", set: inStockSet, titleCheck: 0 },
+    { filter: "Shipping Speed", set: shippingSet, titleCheck: 0 },
+  ];
+
+  // Creates HTML injection if set greater than 1, adds a filter row HTML injection for each element of set
+  const showfilters = function (arrayOfFilters) {
+    arrayOfFilters.forEach(function (filterElement) {
+      // console.log(filterElement.filter, filterElement.set);
+      if (filterElement.set.size > 0) {
+        if (filterElement.titleCheck === 1) {
+          var titleHtml = `
+          <div class="filters__row">
+            <div class="filters__type--title">
+                <input type="checkbox" checked id="${filterElement.filter}--title" value=1>
+                <label for="${filterElement.filter}--title">${filterElement.filter}</label>
+            </div>
+          </div>
+        `;
+        } else {
+          var titleHtml = `
+        <div class="filters__row">
+          <div class="filters__type--title">
+            <label for="${filterElement.filter}--title">${filterElement.filter}</label>
+          </div>
+        </div>
+      `;
+        }
+
+        filterCatagories.insertAdjacentHTML("beforeend", titleHtml);
+
+        // adds a row for each sub element
+        filterElement.set.forEach(function (mov) {
+          var subHTML = `
+                  <div class="filters__row">
+                    <div class="filters__type--norm">
+                      <input type="checkbox" checked value="${mov}" class="subChecks"/>
+                      <label for="${filterElement.filter}--norm">${mov}</label>
+                    </div>
+                  </div>
+                `;
+
+          filterCatagories.insertAdjacentHTML("beforeend", subHTML);
+        });
+      }
+    });
+  };
+
+  showfilters(filters);
+};
+
+displayFilters(availableProducts);
+
+// filters full list of products, sorts by rank, returns 15 at a time
+const filterProducts = function (
+  products, // array of products
+  // sameSupplier = 0, something to implament in V.3 bundles
+  manufacAll = 1, // 1 or 0
+  distribAll = 1, // 1 or 0
+  manufacturers = [], // array of strings
+  distributers = [], // array of strings
+  inStock = -1, // int to be greater than
+  shipSpeed = -1 // int to be less than
+) {
+  var masterList = [];
+  const multiFilter = function (arrayBase, arrayFilters) {
+    var tempList = [];
+    arrayFilters.forEach(function (obj) {
+      var tempTempList = arrayBase.filter(function (dist) {
+        if (
+          dist.supplier === undefined ||
+          dist.supplier.toLowerCase() != obj.toLowerCase()
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      tempList = tempList.concat(tempTempList);
+    });
+
+    return tempList;
+  };
+
+  // const test = multiFilter(filterSupps, availableProducts);
+
+  if (manufacAll === 1) {
+    var manufac = products.filter(function (variable) {
+      return variable.businessType === 1;
+    });
+  } else {
+    var manufac = multiFilter(products, manufacturers);
+  }
+
+  if (distribAll === 1) {
+    // if check list.includes(product.supplier.toLowerCase())
+    var distri = products.filter(function (variable) {
+      return variable.businessType === 2;
+    });
+  } else {
+    var distri = multiFilter(products, distributers);
+  }
+
+  masterList = masterList.concat(manufac, distri);
+
+  if (inStock != -1) {
+    masterList = masterList.filter(function (variable) {
+      return variable.inStock >= inStock;
+    });
+  }
+
+  if (shipSpeed != -1) {
+    masterList = masterList.filter(function (variable) {
+      return variable.shippingTime <= shipSpeed;
+    });
+  }
+  return masterList;
+};
+
+// Sorts products from least to greatest (cost, shipping)
+// defaults to cheepest will add best in the near future
+const sortProducts = function (arrayBase, cheepest = 1, fastest = 0) {
+  if (cheepest === 1) {
+    function compareNumbers(a, b) {
+      return a.price - b.price;
+    }
+    arrayBase = arrayBase.sort(compareNumbers);
+  }
+
+  if (fastest === 1) {
+    function compareNumbers(a, b) {
+      return a.shippingTime - b.shippingTime;
+    }
+    arrayBase = arrayBase.sort(compareNumbers);
+  }
+
+  console.log(arrayBase);
+  return arrayBase;
+};
+
+// Display rows of products from the filtered list
+const displayProducts = function (returnedProducts, sort = false) {
+  const productRows = function (rp, sort = false) {
+    // image = "";
+    supplier = rp.supplier; // placeholder for image
+    inStock = rp.inStock;
+    shippingTime = rp.shippingTime;
+    price = rp.price;
+    // savings = 0; Not sure how to implament this yet
+
+    html = `
+    <div class="product__info">
+    <div class="product__supplier">${supplier}</div>
+    <div class="product__inStock">${inStock} Units</div>
+    <div class="product__shippingTime">${shippingTime} Days</div>
+    <div class="product__price">$${price}</div>
+    </div>`;
+
+    partsEntries.insertAdjacentHTML("beforeend", html);
+  };
+
+  //
+  returnedProducts.forEach(function (item) {
+    productRows(item);
+  });
+};
+
+displayProducts(
+  sortProducts(
+    filterProducts(
+      availableProducts,
+      (manufacAll = 1),
+      (distribAll = 1),
+      (manufacturers = []),
+      (distributers = ["Turn14"]),
+      (inStock = -1),
+      (shipSpeed = -1)
+    ),
+    (cheepest = 1),
+    (fastest = 0)
+  )
+);
+searchButton.addEventListener("click", function (e) {
+  // Prevent form from submitting
+  e.preventDefault();
+  var quantity = document.getElementById("quanitiyfilter");
+  var date = document.getElementById("datefilter").value;
+
+  console.log(quantity);
+  console.log(date);
+});
+
+// document.querySelector(".messageCheckbox").checked;
+
+// let currentDate = new Date().toJSON().slice(0, 10);
+// console.log(currentDate); // "2022-06-17"
+
+// var date = moment();
+// var disDate = date.format("YYYY-MM-DD");
+// console.log(disDate); // "2023-05-14"
+
+filtersButton.addEventListener("click", function (e) {
+  // Prevent form from submitting
+  e.preventDefault();
+  var manuCheck = document.getElementById("manufacturers--title");
+  var distCheck = document.getElementById("distributors--title");
+  var subChecks = document.getElementsByClassName("subChecks");
+
+  // subChecks.forEach(function (item) {
+  //   console.log(item);
+  // });
+
+  for (var i = 0; i < subChecks.length; i++) {
+    console.log(subChecks[i].value);
+  }
+
+  console.log(subChecks);
+
+  // var checkbox = document.getElementById("myCheckbox");
+  // if (manuCheck.checked) {
+  //   console.log("The checkbox is checked.");
+  //   console.log("The value of the checkbox is " + manuCheck.value);
+  // } else {
+  //   console.log("The checkbox is not checked.");
+  // }
+
+  // var manuCheck = document.querySelector("manufacturers--title");
+
+  // var manuCheck = manuCheck.value;
+
+  // var manuList = document.getElementsByClassName("manufacturers--title");
+});
