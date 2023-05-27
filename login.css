@@ -17,8 +17,8 @@ a {
   text-decoration: none;
 }
 
-.login {
-  width: 600px;
+login {
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -57,6 +57,7 @@ a {
 
 #username, #password {
   display: block;
+  margin: 0 auto;
   border: 0px solid var(--highlight);
   font-family: 'Montserrat', sans-serif;
   padding: 12px;
@@ -66,6 +67,7 @@ a {
 
 .login-button {
   display: block;
+  margin: 0 auto;
   font-family: 'Montserrat', sans-serif;
   color: #fff;
   background-color: var(--highlight);
@@ -81,9 +83,6 @@ a {
   background: #fff;
   border: 2px solid var(--highlight);
 }
-
-
-
 
 
 .forgot-password a {
