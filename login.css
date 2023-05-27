@@ -13,6 +13,10 @@ body {
   background-color: var(--background);
 }
 
+a {
+  text-decoration: none;
+}
+
 .login {
   width: 600px;
   margin: 0 auto;
@@ -50,60 +54,48 @@ body {
   width: 200px;
 }
 
-.login {
-  width: 500px;
-  margin: 0 auto;
-}
 
-input[type="email"],
-input[type="password"] {
-  width: 100%;
+#username, #password {
+  display: block;
+  border: 0px solid var(--highlight);
+  font-family: 'Montserrat', sans-serif;
   padding: 12px;
   border-radius: var(--radius);
   margin-bottom: 25px;
-
-  border: 0px solid var(--highlight);
-  font-family: 'Montserrat', sans-serif;
 }
 
-.submit {
+.login-button {
+  display: block;
   font-family: 'Montserrat', sans-serif;
   color: #fff;
   background-color: var(--highlight);
   border: var(--border) solid var(--highlight);
   padding: 12px 20px;
   border-radius: var(--radius);
-  cursor: pointer;
   font-size: 16px;
-  width: 100%;
   transition: all 150ms ease-in-out;
   font-weight: 500;
 }
 
-button[type="submit"]:hover {
-  color: var(--highlight);
+.login-button:hover {  color: var(--highlight);
   background: #fff;
   border: 2px solid var(--highlight);
 }
 
-a {
-  text-decoration: none;
-}
 
-.forgotPW {
+
+
+
+.forgot-password a {
   margin-top: 20px;
   display: flex;
   justify-content: start;
   color: var(--dark-text);
-  text-decoration: none;
   transition: all 150ms ease-in-out;
   font-size: 14px;
 }
 
-.forgotPW:hover {
+.forgot-password:hover {
   color: var(--highlight);
   font-weight: 500;
 }
-
-/* background-image: linear-gradient(to top left, #39b385, #9be15d); */
-/* background-image: linear-gradient(to top left, #2f8f6a, #70a343); */
