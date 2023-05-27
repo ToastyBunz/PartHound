@@ -13,17 +13,19 @@ body {
   background-color: var(--background);
 }
 
-.login {
-  width: 600px;
+a {
+  text-decoration: none;
+}
+
+login {
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .home-buttons {
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  justify-content: center;
+  margin: 50px auto;
 }
 
 .home-buttons a {
@@ -52,73 +54,47 @@ body {
   width: 200px;
 }
 
-form {
-  /* background-color: #fff; */
-  /* border-radius: 0 0 10px 10px; */
-  /* border-radius: 10px 10px 10px 10px; */
-  padding: 20px;
-  /* box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); */
-  width: 400px;
-  margin: 0 auto;
-  /* border: solid 1px #666; */
-}
 
-label {
+#username, #password {
   display: block;
-  margin-bottom: 5px;
-
-  color: #666;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
+  margin: 0 auto;
+  border: 0px solid var(--highlight);
+  font-family: 'Montserrat', sans-serif;
   padding: 12px;
   border-radius: var(--radius);
   margin-bottom: 25px;
-  box-sizing: border-box;
-  border: 0px solid var(--highlight);
-  font-family: 'Montserrat', sans-serif;
 }
 
-.submit {
+.login-button {
+  display: block;
+  margin: 0 auto;
   font-family: 'Montserrat', sans-serif;
   color: #fff;
   background-color: var(--highlight);
   border: var(--border) solid var(--highlight);
   padding: 12px 20px;
   border-radius: var(--radius);
-  cursor: pointer;
   font-size: 16px;
-  width: 100%;
   transition: all 150ms ease-in-out;
   font-weight: 500;
 }
 
-button[type="submit"]:hover {
-  color: var(--highlight);
+.login-button:hover {  color: var(--highlight);
   background: #fff;
   border: 2px solid var(--highlight);
 }
 
-a {
-  text-decoration: none;
-}
 
-.forgotPW {
+.forgot-password a {
   margin-top: 20px;
   display: flex;
   justify-content: start;
   color: var(--dark-text);
-  text-decoration: none;
   transition: all 150ms ease-in-out;
   font-size: 14px;
 }
 
-.forgotPW:hover {
+.forgot-password:hover {
   color: var(--highlight);
   font-weight: 500;
 }
-
-/* background-image: linear-gradient(to top left, #39b385, #9be15d); */
-/* background-image: linear-gradient(to top left, #2f8f6a, #70a343); */
