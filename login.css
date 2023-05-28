@@ -43,7 +43,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 60px 0;
+  margin: 50px 0;
 }
 
 .img-holder img {
@@ -92,6 +92,7 @@ input {
 .login-button:hover {  color: var(--highlight);
   background: var(--background);
   border: 1.5px solid var(--highlight);
+  cursor: pointer;
 }
 
 .forgot-password {
@@ -121,7 +122,7 @@ input {
 }
 
 .have-account a {
-  font-weight: bold;
+  font-weight: 600;
   margin-left: 5px;
   color: var(--dark);
   transition: all 150ms ease-in-out;
