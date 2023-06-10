@@ -1,0 +1,79 @@
+:root {
+  --background: #dfe0e0;
+  /* #ececec */
+  --highlight: #a2c11c;
+  --dark-text: #385170;
+  --dark: #393e46;
+
+  --radius: 4px;
+  --border: 1.5px;
+  /* --font-bold: font-weight: bold; */
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--background);
+}
+
+a {
+  text-decoration: none;
+}
+
+.navigation {
+  color: var(--dark-text);
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0px 100px;
+}
+
+.nav-button {
+  color: var(--dark);
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.nav-button:hover {
+  background: var(--highlight);
+  border-radius: var(--radius);
+  color: white;
+  border-color: var(--highlight);
+  transition: all 150ms ease-in-out;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container img {
+  width: 350px;
+}
+
+.subscription-cards {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  border-radius: var(--radius);
+  margin: 0px 50px;
+  background-color: white;
+  width: 400px;
+  height: 450px;
+}
+
+.card:hover {
+  border: 1px solid var(--highlight);
+  box-shadow: 10px 10px 10px #b8b8b859;
+  transition: all 150ms ease-in-out;
+}
+
+.card-info {
+  display: flex;
+  justify-content: center;
+}
