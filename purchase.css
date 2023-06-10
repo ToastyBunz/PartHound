@@ -13,6 +13,7 @@
 body {
   font-family: "Montserrat", sans-serif;
   background-color: var(--background);
+  padding-bottom: 100px;
 }
 
 a {
@@ -64,16 +65,30 @@ a {
   margin: 0px 50px;
   background-color: white;
   width: 400px;
-  height: 450px;
+  height: 300px;
+  transition: all 400ms ease-in-out;
+  border: 1px solid white;
+  padding: 35px;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.card-content {
 }
 
 .card:hover {
   border: 1px solid var(--highlight);
-  box-shadow: 10px 10px 10px #b8b8b859;
-  transition: all 150ms ease-in-out;
+  cursor: pointer;
+  /*  box-shadow: 10px 10px 10px #b8b8b859; */
 }
 
 .card-info {
   display: flex;
   justify-content: center;
+}
+
+.price {
+  font-size: 34px;
 }
