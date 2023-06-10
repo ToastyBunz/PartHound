@@ -4,6 +4,19 @@
 Font Sizing
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98  */
 
+:root {
+  --background: #dfe0e0;
+  /* #ececec */
+  --highlight: #a2c11c;
+  --dark-text: #385170;
+  --dark: #393e46;
+  --redgrad: linear-gradient(to top left, #e52a5a, #ff585f);
+
+  --radius: 4px;
+  --border: 1.5px;
+  /* --font-bold: font-weight: bold; */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +26,7 @@ Font Sizing
 body {
   font-family: "Work Sans", sans-serif;
   color: #212a30;
-  background-color: #f1f3f5;
+  background-color: var(--background);
 }
 
 .header {
@@ -30,12 +43,38 @@ body {
   margin-left: 48px;
 }
 
-nav {
+.nav {
   /* background-color: red; */
   display: flex;
   gap: 24px;
   margin-right: 48px;
   align-items: center;
+}
+
+.navigation {
+  color: var(--dark-text);
+  display: flex;
+  justify-content: end;
+  margin-top: 25px;
+  margin-right: 25px;
+}
+
+.nav-button {
+  color: var(--dark);
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.nav-button:hover {
+  background: var(--highlight);
+  border-radius: var(--radius);
+  color: white;
+  border-color: var(--highlight);
+  transition: all 150ms ease-in-out;
 }
 
 .searchblock {
@@ -121,6 +160,10 @@ nav {
   align-items: center;
   box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.1);
   /* border-bottom: 2px solid rgba(160, 160, 160, 0.1); */
+}
+
+.product__info:hover {
+  border: 2px solid var(--highlight);
 }
 
 .cbf {
