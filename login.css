@@ -1,17 +1,17 @@
 :root {
-  --background: #DFE0E0;
+  --background: #dfe0e0;
   /* #ececec */
   --highlight: #a2c11c;
   --dark-text: #385170;
-  --dark: #393E46;
+  --dark: #393e46;
 
   --radius: 4px;
   --border: 1.5px;
-  --font-bold: font-weight: bold;
+  /* --font-bold: font-weight: bold; */
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   background-color: var(--background);
 }
 
@@ -19,14 +19,15 @@ a {
   text-decoration: none;
 }
 
-.navigation{
+.navigation {
   color: var(--dark-text);
   display: flex;
-  justify-content: space-evenly;
-  margin: 0px 100px;
+  justify-content: end;
+  margin-top: 25px;
+  margin-right: 25px;
 }
 
-.nav-button{
+.nav-button {
   color: var(--dark);
   border: none;
   background-color: inherit;
@@ -36,12 +37,17 @@ a {
   display: inline-block;
 }
 
-.nav-button:hover{
+.nav-button:hover {
   background: var(--highlight);
   border-radius: var(--radius);
   color: white;
-  border-color:var(--highlight);
+  border-color: var(--highlight);
   transition: all 150ms ease-in-out;
+}
+
+#login {
+  border: 2px solid var(--highlight);
+  border-radius: var(--radius);
 }
 
 /* .home-buttons {
@@ -85,10 +91,11 @@ input {
   width: 93%;
 }
 
-#username, #password {
-  border: var(--border) solid #F2F2F2;
-  background: #F2F2F2;
-  font-family: 'Montserrat', sans-serif;
+#username,
+#password {
+  border: var(--border) solid #f2f2f2;
+  background: #f2f2f2;
+  font-family: "Montserrat", sans-serif;
   padding: 10px 14px;
   border-radius: var(--radius);
   margin-bottom: 25px;
@@ -97,7 +104,7 @@ input {
 }
 
 .login-button {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   color: #fff;
   background-color: var(--highlight);
   border: var(--border) solid var(--highlight);
@@ -111,7 +118,8 @@ input {
   margin-top: 5px;
 }
 
-.login-button:hover {  color: var(--highlight);
+.login-button:hover {
+  color: var(--highlight);
   background: var(--background);
   border: 1.5px solid var(--highlight);
   cursor: pointer;
