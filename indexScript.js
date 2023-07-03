@@ -29,7 +29,7 @@ const item3 = {
   supplier: "Turn14",
   businessType: 2, // 1 = manufactuer 2 = distributer
   price: 115,
-  inStock: 2,
+  inStock: "backordered",
   shipLocation: "Pittsburg, PA",
   shippingTime: 5,
 };
@@ -80,7 +80,7 @@ const displayFilters = function (returnedProducts, sort = false) {
   const shippingArray = [];
   const shippingArraySTR = [];
 
-  // filter numerical arrays by catagory (magnetude)
+  // filter numerical arrays by catagory (magnetude) for checkboxes
   const filterArray = function (
     item,
     mag1,
@@ -105,7 +105,7 @@ const displayFilters = function (returnedProducts, sort = false) {
     }
   };
 
-  // sort out manufacturers and distributers
+  // sort out manufacturers and distributers for sorting by checkboxes
   returnedProducts.forEach(function (item) {
     if (item.businessType == 1) {
       manufacturerSet.add(item.supplier);
@@ -214,6 +214,7 @@ const filterProducts = function (
   shipSpeed = -1 // int to be less than
 ) {
   console.log("Product list:", products);
+
   var masterList = [];
   const multiFilter = function (arrayBase, arrayFilters) {
     var tempList = [];
@@ -235,33 +236,59 @@ const filterProducts = function (
     return tempList;
   };
 
-  // const test = multiFilter(filterSupps, availableProducts);
-
+  // checks if all manufacturers are selected
   if (manufacAll === 1) {
     var manufac = products.filter(function (variable) {
       return variable.businessType === 1;
     });
-  } else {
+  }
+  // adds only the manufacturers selected to mnufa
+  else {
     var manufac = multiFilter(products, manufacturers);
   }
 
+  // checks if all distributers were selected
   if (distribAll === 1) {
     // if check list.includes(product.supplier.toLowerCase())
     var distri = products.filter(function (variable) {
       return variable.businessType === 2;
     });
-  } else {
+  }
+  // adds only distributers selected
+  else {
     var distri = multiFilter(products, distributers);
   }
 
   masterList = masterList.concat(manufac, distri);
 
+  // filters out anythong above the inStock variable
+  // if (inStock != -1) {
+  //   masterList = masterList.filter(function (variable) {
+  //     return variable.inStock >= inStock;
+  //   });
+  // }
+
+  // Transforms inStockNumbers string elements to int
+  if (Array.isArray(inStock)) {
+    var inStockNumbers = inStock.map(function (x) {
+      return parseInt(x, 10);
+    });
+    console.log("real in stock", inStockNumbers);
+  }
+
+  //TODO: get this to compare variable.inStock to the minimum value in inStockNumbers
   if (inStock != -1) {
     masterList = masterList.filter(function (variable) {
-      return variable.inStock >= inStock;
+      if (Number(variable.inStock) >= inStock) {
+        // console.log(`${variable.inStock} is greater than ${inStock}`);
+        console.log("var_1", Number(variable.inStock));
+        console.log("var_2 instock", inStock);
+        // console.log("variable", variable);
+      }
     });
   }
 
+  // filters out anythong above the shipSpeed variable
   if (shipSpeed != -1) {
     masterList = masterList.filter(function (variable) {
       return variable.shippingTime <= shipSpeed;
@@ -386,7 +413,7 @@ filtersButton.addEventListener("click", function (e) {
           distArray.push(checks[i].value);
         } else if (obj.filter === "In-Stock") {
           if (checks[i].value === "backordered") {
-            stockArray.push("-1");
+            stockArray.push("0");
           } else {
             stockArray.push(checks[i].value);
           }
@@ -397,10 +424,12 @@ filtersButton.addEventListener("click", function (e) {
     }
   });
 
-  console.log("manuarray", manuArray);
-  console.log("distarray", distArray);
+  // helpful logs
+
+  // console.log("manuarray", manuArray);
+  // console.log("distarray", distArray);
   console.log("stockarray", stockArray);
-  console.log("shiparray", shipArray);
+  // console.log("shiparray", shipArray);
 
   // console.log(manuValue);
   // console.log(distValue);
@@ -418,6 +447,8 @@ filtersButton.addEventListener("click", function (e) {
   var minSupply = Math.min(...stockArray);
   var maxShip = Math.max(...shipArray);
 
+  // console.log("minni", minSupply);
+
   // In Stock not filtering properly. it is taking higher number than it should
 
   partsEntries.innerHTML = "";
@@ -425,15 +456,35 @@ filtersButton.addEventListener("click", function (e) {
 
   // console.log("ap", availableProducts);
 
+  // Convert availableProducts inStock backordered into 0
+  const backorderedToZero = function (array) {
+    availableProductsTemp = [];
+    array.forEach(function (arrayitem) {
+      if (arrayitem.inStock === "backordered") {
+        arrayitem.inStock = 0;
+        availableProductsTemp.push(arrayitem);
+      } else {
+        availableProductsTemp.push(arrayitem);
+      }
+      // console.log("testing", arrayitem.inStock);
+    });
+    return availableProductsTemp;
+  };
+
+  var availableProductsAdjusted = backorderedToZero(availableProducts);
+  // console.log("newArray", availableProductsAdjusted);
+
+  // console.log("ap2", availableProducts);
+
   displayProducts(
     sortProducts(
       filterProducts(
-        availableProducts,
+        availableProductsAdjusted,
         (manufacAll = manuValue),
         (distribAll = distValue),
         (manufacturers = manuArray),
         (distributers = distArray),
-        (inStock = -1), // -1 shows all (problem of not showing)
+        (inStock = stockArray), // -1 shows all (problem of not showing)
         (shipSpeed = -1) // -1 shows all (problem of not showing)
       ),
       (cheepest = 1),
