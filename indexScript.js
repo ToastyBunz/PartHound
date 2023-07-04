@@ -126,7 +126,7 @@ const displayFilters = function (returnedProducts, sort = false) {
     );
   });
 
-  // sort the numerical catagories least to greatest, convert to string add +
+  // sort the numerical catagories least to greatest, convert to string, add +
   const orderArrays = function (arrayNum, arrayStr) {
     arrayNum.sort(function (a, b) {
       return a - b;
@@ -276,22 +276,37 @@ const filterProducts = function (
     console.log("real in stock", inStockNumbers);
   }
 
-  //TODO: get this to compare variable.inStock to the minimum value in inStockNumbers
   if (inStock != -1) {
     masterList = masterList.filter(function (variable) {
-      if (Number(variable.inStock) >= inStock) {
-        // console.log(`${variable.inStock} is greater than ${inStock}`);
-        console.log("var_1", Number(variable.inStock));
-        console.log("var_2 instock", inStock);
-        // console.log("variable", variable);
+      if (Number(variable.inStock) >= Math.min(...inStockNumbers)) {
+        console.log(
+          //TODO: make sure these products are going into masterlist
+          `${variable.inStock} is greater than ${Math.min(...inStockNumbers)}`
+        );
       }
     });
   }
 
+  // converts shipSpeed array of strings to array of numbers
+  if (Array.isArray(shipSpeed)) {
+    var shipSpeedNumbers = shipSpeed.map(function (x) {
+      return parseInt(x, 10);
+    });
+    console.log("real in stock", inStockNumbers);
+  }
+
+  //TODO: Have this work like 271 - 288 and add injection
   // filters out anythong above the shipSpeed variable
+  //TODO: Modify masterlist then return it to display products
   if (shipSpeed != -1) {
     masterList = masterList.filter(function (variable) {
-      return variable.shippingTime <= shipSpeed;
+      if (Number(variable.shipSpeed) <= Math.min(...shipSpeedNumbers)) {
+        console.log(
+          `${variable.shipSpeed} is greater than ${Math.min(
+            ...shipSpeedNumbers
+          )}`
+        );
+      }
     });
   }
   return masterList;
@@ -318,6 +333,7 @@ const sortProducts = function (arrayBase, cheepest = 1, fastest = 0) {
   return arrayBase;
 };
 
+// TODO: put matsterlist from line 307 into returned products when filter button is depressed
 // Display rows of products from the filtered list
 const displayProducts = function (returnedProducts, sort = false) {
   const productRows = function (rp, sort = false) {
@@ -345,6 +361,7 @@ const displayProducts = function (returnedProducts, sort = false) {
   });
 };
 
+// When the page loads this dictates how the information is displayed
 displayProducts(
   sortProducts(
     filterProducts(
