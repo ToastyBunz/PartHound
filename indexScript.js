@@ -77,7 +77,7 @@ const displayFilters = function (returnedProducts, sort = false) {
   const distributorSet = new Set();
   var inStockArray = [];
   var inStockArraySTR = [];
-  const shippingArray = [];
+  var shippingArray = [];
   const shippingArraySTR = [];
 
   // filter numerical arrays by catagory (magnetude) for checkboxes
@@ -114,6 +114,8 @@ const displayFilters = function (returnedProducts, sort = false) {
       distributorSet.add(item.supplier);
     }
 
+    console.log("shipping array", shippingArray);
+
     filterArray(item.inStock, 4, 10, 25, 100, inStockArraySTR, inStockArray);
     filterArray(
       item.shippingTime,
@@ -127,13 +129,19 @@ const displayFilters = function (returnedProducts, sort = false) {
   });
 
   // sort the numerical catagories least to greatest, convert to string, add +
-  const orderArrays = function (arrayNum, arrayStr) {
+  const orderArrays = function (arrayNum, arrayStr, order) {
     arrayNum.sort(function (a, b) {
       return a - b;
     });
-    var arraySTR = arrayStr.concat(arrayNum);
-    var arraySTR = arraySTR.toString();
-    var arrayBae = arraySTR.split(",");
+    if (order === 1) {
+      var arraySTR = arrayStr.concat(arrayNum);
+      var arraySTR = arraySTR.toString();
+      var arrayBae = arraySTR.split(",");
+    } else {
+      var arraySTR = arrayNum.concat(arrayStr);
+      var arraySTR = arraySTR.toString();
+      var arrayBae = arraySTR.split(",");
+    }
     // var arrayBae = arrayBae.map(function (obj) {
     //   return (obj += "+");
     // });
@@ -141,9 +149,17 @@ const displayFilters = function (returnedProducts, sort = false) {
     return arrayBae;
   };
 
+  shippingArraySTR.push("Any");
+  console.log(shippingArraySTR);
+
   // add numerical array to str array, convert to set to remove duplicates
-  var inStockSet = new Set(orderArrays(inStockArray, inStockArraySTR));
-  var shippingSet = new Set(orderArrays(shippingArray, shippingArraySTR));
+  var inStockSet = new Set(orderArrays(inStockArray, inStockArraySTR, 1));
+  var shippingSet = new Set(orderArrays(shippingArray, shippingArraySTR, 0));
+
+  console.log("shippingSet", shippingSet);
+  console.log("shippingArray", shippingArray);
+  console.log("shippingSetSTR", shippingArraySTR);
+  console.log("stockSetSTR", inStockArraySTR);
 
   // this is what to modify if you want to show more filters
   const filters = [
@@ -261,29 +277,16 @@ const filterProducts = function (
 
   masterList = masterList.concat(manufac, distri);
 
-  // filters out anythong above the inStock variable
-  // if (inStock != -1) {
-  //   masterList = masterList.filter(function (variable) {
-  //     return variable.inStock >= inStock;
-  //   });
-  // }
-
   // Transforms inStockNumbers string elements to int
   if (Array.isArray(inStock)) {
     var inStockNumbers = inStock.map(function (x) {
       return parseInt(x, 10);
     });
-    console.log("real in stock", inStockNumbers);
   }
-
+  // Filters out products from search result that do not have enough units based on checked boxes
   if (inStock != -1) {
     masterList = masterList.filter(function (variable) {
-      if (Number(variable.inStock) >= Math.min(...inStockNumbers)) {
-        console.log(
-          //TODO: make sure these products are going into masterlist
-          `${variable.inStock} is greater than ${Math.min(...inStockNumbers)}`
-        );
-      }
+      return Number(variable.inStock) >= Math.min(...inStockNumbers);
     });
   }
 
@@ -292,21 +295,12 @@ const filterProducts = function (
     var shipSpeedNumbers = shipSpeed.map(function (x) {
       return parseInt(x, 10);
     });
-    console.log("real in stock", inStockNumbers);
   }
 
-  //TODO: Have this work like 271 - 288 and add injection
-  // filters out anythong above the shipSpeed variable
-  //TODO: Modify masterlist then return it to display products
+  // Filters out products from search result that do not have enough units based on checked boxes
   if (shipSpeed != -1) {
     masterList = masterList.filter(function (variable) {
-      if (Number(variable.shipSpeed) <= Math.min(...shipSpeedNumbers)) {
-        console.log(
-          `${variable.shipSpeed} is greater than ${Math.min(
-            ...shipSpeedNumbers
-          )}`
-        );
-      }
+      return Number(variable.shippingTime) <= Math.max(...shipSpeedNumbers);
     });
   }
   return masterList;
@@ -377,6 +371,7 @@ displayProducts(
     (fastest = 0)
   )
 );
+console.log("--------------------------------------");
 
 searchButton.addEventListener("click", function (e) {
   // Prevent form from submitting
@@ -435,7 +430,14 @@ filtersButton.addEventListener("click", function (e) {
             stockArray.push(checks[i].value);
           }
         } else if (obj.filter === "Shipping-Speed") {
-          shipArray.push(checks[i].value);
+          if (shipArray != -1) {
+            if (checks[i].value === "Any") {
+              shipArray = -1;
+            } else {
+              console.log("clipply shippy", shipArray);
+              shipArray.push(checks[i].value);
+            }
+          }
         }
       }
     }
@@ -446,7 +448,7 @@ filtersButton.addEventListener("click", function (e) {
   // console.log("manuarray", manuArray);
   // console.log("distarray", distArray);
   console.log("stockarray", stockArray);
-  // console.log("shiparray", shipArray);
+  console.log("shiparray", shipArray);
 
   // console.log(manuValue);
   // console.log(distValue);
@@ -461,8 +463,9 @@ filtersButton.addEventListener("click", function (e) {
   // console.log("ShipArray", shipArray);
 
   // filters function is looking for a minimum number of In-Stock to apply and a maximum number of days to ship.
-  var minSupply = Math.min(...stockArray);
-  var maxShip = Math.max(...shipArray);
+  // console.log("stocks", stockArray);
+  // var minSupply = Math.min(...stockArray);
+  // var maxShip = Math.max(...shipArray);
 
   // console.log("minni", minSupply);
 
@@ -473,6 +476,7 @@ filtersButton.addEventListener("click", function (e) {
 
   // console.log("ap", availableProducts);
 
+  // TODO: does this block of code do the same thing as block at 401
   // Convert availableProducts inStock backordered into 0
   const backorderedToZero = function (array) {
     availableProductsTemp = [];
@@ -502,12 +506,12 @@ filtersButton.addEventListener("click", function (e) {
         (manufacturers = manuArray),
         (distributers = distArray),
         (inStock = stockArray), // -1 shows all (problem of not showing)
-        (shipSpeed = -1) // -1 shows all (problem of not showing)
+        (shipSpeed = shipArray) // -1 shows all (problem of not showing)
       ),
       (cheepest = 1),
       (fastest = 0)
     )
   );
 
-  console.log("its kinda working");
+  console.log("--------------------------------------");
 });
